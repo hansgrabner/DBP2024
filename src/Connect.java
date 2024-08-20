@@ -41,15 +41,35 @@ public class Connect {
             // create a connection to the database
             conn = DriverManager.getConnection(url);
             System.out.println("Connection to SQLite has been established.");
-            String selectString = "SELECT KDNR, Vorname, Bonuspunkte FROM Kunden;";
+            //Anpassung - Bonuspunkte > 20
+            String selectString = "SELECT KDNR, Vorname, Bonuspunkte FROM Kunden";
+            //selectString += " WHERE Bonuspunkte > 20; ";
+            //Anpassung: alle Kunden mit E oder e im Namen
+            // selectString += " WHERE Vorname like '%e%'; ";
+            String vorname="Eva";
+           // vorname=";DROP TABLE Kunden";
+            //SQL Injection
+            //eher vermeiden
+            //selectString += " WHERE Vorname = '" + vorname + "'";
+
+
+            System.out.println(selectString);
+
 
             Statement readStmt = conn.createStatement();
 
+            //rs ist ein Cursor mit next() wird auf die nächste Zeile gewechselt
             ResultSet rs =  readStmt.executeQuery(selectString);
 
             while (rs.next()){
+
                 System.out.printf( "Kdnr: %d, Vorname: %s, Punkte: %d%n", rs.getInt(1),
                         rs.getString(2), rs.getInt(3) );
+
+                int bonuspunkte = rs.getInt(3);
+                if (rs.wasNull()){
+                    System.out.println("Bonuspunkte undefiniert");
+                }
             }
 
         } catch (SQLException e) {
