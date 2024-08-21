@@ -13,16 +13,40 @@ public class Main {
         System.out.println("\nread all Customers");
         myHelper.readCustomer();
 
-        System.out.println("\nread Customer by ID");
+        //System.out.println("\nread Customer by ID");
        // Kunde k1 = myHelper.getKundeById(12);
         //System.out.println("Kunde mit KDNR 1");
         //System.out.println(k1);
 
 
-        Kunde neuerKunde =new Kunde(-1, "Jessica",70);
+       // Kunde neuerKunde =new Kunde(-1, "Jessica",70);
 
-        myHelper.insertKunde(neuerKunde);
+        //myHelper.insertKunde(neuerKunde);
 
+        //Produkt pNeu =new Produkt(-1,"Tastatur",20,20,-1);
+
+       // myHelper.insertProdukt(pNeu);
+
+     //   Produkt p1 = myHelper.gerProduktById(1);
+//        System.out.println(p1);
+
+       // System.out.println("Produkte Preis kleiner 100");
+        //System.out.println(myHelper.getProdukteWherePriceSmallerThan(100));
+
+        /*
+        Produkt p1 = myHelper.gerProduktById(1);
+        p1.setBezeichnung("Tastatur mit Kabel");
+        p1.setNettoPreis(25);
+
+        myHelper.updateProdukt(p1);
+*/
+
+        /*
+        int produktDeleted = myHelper.deleteProdukt(2);
+        System.out.println("\nDeleted Products");
+        System.out.println(produktDeleted);
+*/
+        myHelper.demoTransaction();
         myHelper.closeConnection();
 
     }

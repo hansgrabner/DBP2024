@@ -4,6 +4,7 @@
 //Menü file - Project Structure -- Modules - Dependency -- ClassPath wird angepasst
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class DBHelper {
     Connection conn = null;
@@ -91,4 +92,179 @@ public class DBHelper {
         }
 
     }
+/*
+ 1. class Produkt ProuktNr Bezeichnung Nettopreis UstSatz
+ 2. DBHelper erweitern
+ --- insertNeuesProdukt(produkt)
+ --- getProduktById(1) --> Produkt
+ --- getProdukteWherePreisKleiner(30) -- List von Produkte
+        alle IDs lesen und danach die Methode getProduktById zum Lesen verwenden
+  ---updateProdukt(produkt) --- geändert wird die Bezeichnung und der Preis anahand der ProduktNr)
+  Produkt p2 = myHelper.getProduktById(2);
+  p2.setBezeichnung("Handy");
+  p2.setPreis(40);
+  myHelper.updateProdukt(p2);
+  myHelper.deleteProduktById(37) ---> Anzahl gelöschter Produkte (executeUpdate -- affectedRows)
+
+  Bearbeitung bis 11:45 Uhr, danach Mittagspause, Treffen um 12:30 Uhr
+
+ */
+
+    public void insertProdukt(Produkt neuesProdukt) {
+        String insertSQL = "INSERT INTO Produkte(Bezeichnung, NettoPreis, UstSatz) VALUES(?,?,?);";
+        try {
+            PreparedStatement pInsertProdukt = conn.prepareStatement(insertSQL);
+            pInsertProdukt.setString(1, neuesProdukt.getBezeichnung());
+            pInsertProdukt.setDouble(2, neuesProdukt.getNettoPreis());
+            pInsertProdukt.setDouble(3, neuesProdukt.getUstSatz());
+            int rowaffected= pInsertProdukt.executeUpdate();
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+
+    public Produkt gerProduktById(int produktNr) {
+        Produkt p = null;
+        try {
+            PreparedStatement getProduktStmt = conn.prepareStatement(
+                    "SELECT ProduktNr, Bezeichnung, NettoPreis, UstSatz ,\n" +
+                            "    NettoPreis * UstSatz / 100 AS UstBetrag,\n" +
+                            "  NettoPreis *  (1 + UstSatz / 100.) AS BruttoBetrag\n" +
+                            "FROM Produkte WHERE ProduktNr = ?");
+            getProduktStmt.setInt(1, produktNr);
+            ResultSet rs = getProduktStmt.executeQuery();
+
+            if (rs.next()) {
+                String bezeichnung = rs.getString(2);
+                double nettoPreis = rs.getDouble(3);
+                double ustSatz = rs.getDouble(4);
+                double bruttoBetrag = rs.getDouble(6);
+
+                bruttoBetrag = nettoPreis * (1 + ustSatz / 100.);
+
+                p =new Produkt(produktNr, bezeichnung,nettoPreis,ustSatz,bruttoBetrag);
+
+
+            } else {
+                p =new Produkt(produktNr, "nicht gefunden",-1,-1,-1);
+            }
+            return p;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return p;
+    }
+
+    public ArrayList<Produkt> getProdukteWherePriceSmallerThan(double price){
+        ArrayList<Produkt> myList = new ArrayList<>();
+
+        try {
+            String selectProducts = "Select ProduktNr FROM Produkte WHERE NettoPreis < ?";
+            PreparedStatement pStmt = conn.prepareStatement(selectProducts);
+            pStmt.setDouble(1,price);
+            ResultSet rs = pStmt.executeQuery();
+            while (rs.next()){
+                Produkt p = gerProduktById(rs.getInt(1));
+                myList.add(p);
+
+            }
+        }
+        catch ( SQLException e){
+            System.out.println(e);
+        }
+
+        return  myList;
+
+    }
+
+
+
+    public int updateProdukt(Produkt geaendertesProdukt) {
+
+        int rowaffected=0;
+        String updateSql = "UPDATE Produkte \n" +
+                "SET Bezeichnung=?, NettoPreis = ?, UstSatz = ? \n" +
+                "WHERE ProduktNr = ?;";
+        try {
+            PreparedStatement pUpdateProdukte = conn.prepareStatement(updateSql);
+            pUpdateProdukte.setString(1, geaendertesProdukt.getBezeichnung());
+            pUpdateProdukte.setDouble(2, geaendertesProdukt.getNettoPreis());
+            pUpdateProdukte.setDouble(3, geaendertesProdukt.getUstSatz());
+            pUpdateProdukte.setInt(4, geaendertesProdukt.getProduktNr());
+            rowaffected= pUpdateProdukte.executeUpdate();
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return  rowaffected;
+    }
+
+    public int deleteProdukt(int produktNr) {
+
+        int rowaffected=0;
+        String deleteSQL = "DELETE FROM Produkte \n" +
+                "WHERE ProduktNr = ?;";
+        try {
+            PreparedStatement pDelete = conn.prepareStatement(deleteSQL);
+            pDelete.setInt(1, produktNr);
+            rowaffected= pDelete.executeUpdate();
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return  rowaffected;
+    }
+
+    public void demoTransaction(){
+                    /*UPDATE Bankkonto
+            SET Betrag = Betrag - 50
+            WHERE KontoNur = 1;
+
+            UPDATE Bankkonto
+            SET Betrag = Betrag + 50
+            WHERE KontoNur = 2;*
+            */
+
+
+        int rowaffectedAbbuchung=0;
+        int rowaffectedGutbuchen=0;
+        String updateSqlAbbuchen = "UPDATE Bankkonto\n" +
+                "SET Betrag = Betrag - 50\n" +
+                "WHERE KontoNur = ?;";
+
+        String updateSqlGutbuchen = "UPDATE Bankkonto\n" +
+                "SET Betrag = Betrag + 50\n" +
+                "WHERE KontoNur = ?;";
+        try {
+            PreparedStatement pAbbuchen = conn.prepareStatement(updateSqlAbbuchen);
+            PreparedStatement pGutbuchen = conn.prepareStatement(updateSqlGutbuchen);
+
+            pAbbuchen.setInt(1, 1);
+            pGutbuchen.setInt(1, 7);
+
+            conn.setAutoCommit(false);
+
+            rowaffectedAbbuchung = pAbbuchen.executeUpdate(); //Autocommit verhindern
+            rowaffectedGutbuchen = pGutbuchen.executeUpdate();//Autocommit verhindern
+
+            if (rowaffectedAbbuchung == 1 && rowaffectedGutbuchen == 1){
+                //Commit
+                conn.commit();
+            } else {
+                //Rollback
+                conn.rollback();
+            }
+
+            conn.setAutoCommit(true);
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+
+    }
+
 }
