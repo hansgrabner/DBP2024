@@ -7,7 +7,11 @@ public class Main {
         System.out.printf("Hello and welcome!");
 
         //Connect.connect();
-        Connect.readCustomer();
+      //  Connect.readCustomer();
+        DBHelper myHelper = new DBHelper();
+        myHelper.openConnection();
+        myHelper.readCustomer();
+        myHelper.closeConnection();
 
 
     }
