@@ -7,6 +7,7 @@ import java.sql.*;
 
 public class DBHelper {
     Connection conn = null;
+
     public void openConnection() {
         try {
             String url = "jdbc:sqlite:C:/LVs/DBP2024/Johann.db";
@@ -27,7 +28,7 @@ public class DBHelper {
     }
 
 
-    public  void readCustomer() {
+    public void readCustomer() {
 
         try {
 
@@ -36,7 +37,7 @@ public class DBHelper {
             Statement readStmt = conn.createStatement();
 
             //rs ist ein Cursor mit next() wird auf die nächste Zeile gewechselt
-            ResultSet rs =  readStmt.executeQuery(selectString);
+            ResultSet rs = readStmt.executeQuery(selectString);
 
             while (rs.next()) {
 
@@ -54,6 +55,27 @@ public class DBHelper {
             System.out.println(e.getMessage());
         }
 
+    }
+
+    public Kunde getKundeById(int kdnr) {
+        Kunde k = null;
+        try {
+            PreparedStatement getKundeStmt = conn.prepareStatement(
+                    "SELECT KDNR, Vorname, Bonuspunkte FROM Kunden WHERE KDNR = ?");
+            getKundeStmt.setInt(1, kdnr);
+            ResultSet rs = getKundeStmt.executeQuery();
+
+            if (rs.next()) {
+                k = new Kunde(rs.getInt(1), rs.getString(2), rs.getInt(3));
+            } else {
+                k = new Kunde(-1, "nicht gefunden", -1);
+            }
+            return k;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return k;
     }
 
 }

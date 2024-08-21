@@ -10,7 +10,13 @@ public class Main {
       //  Connect.readCustomer();
         DBHelper myHelper = new DBHelper();
         myHelper.openConnection();
+        System.out.println("\nread all Customers");
         myHelper.readCustomer();
+
+        System.out.println("\nread Customer by ID");
+        Kunde k1 = myHelper.getKundeById(12);
+        System.out.println("Kunde mit KDNR 1");
+        System.out.println(k1);
         myHelper.closeConnection();
 
 
