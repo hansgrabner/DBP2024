@@ -78,4 +78,17 @@ public class DBHelper {
         return k;
     }
 
+    public void insertKunde(Kunde neuerKunde) {
+        String insertSQL = "INSERT INTO Kunden(Vorname,Bonuspunkte) VALUES(?,?);";
+        try {
+            PreparedStatement pInsertKunde = conn.prepareStatement(insertSQL);
+            pInsertKunde.setString(1, neuerKunde.getVorname());
+            pInsertKunde.setInt(2, neuerKunde.getBonuspunkte());
+            int rowaffected= pInsertKunde.executeUpdate();
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+
+    }
 }

@@ -14,11 +14,40 @@ public class Main {
         myHelper.readCustomer();
 
         System.out.println("\nread Customer by ID");
-        Kunde k1 = myHelper.getKundeById(12);
-        System.out.println("Kunde mit KDNR 1");
-        System.out.println(k1);
+       // Kunde k1 = myHelper.getKundeById(12);
+        //System.out.println("Kunde mit KDNR 1");
+        //System.out.println(k1);
+
+
+        Kunde neuerKunde =new Kunde(-1, "Jessica",70);
+
+        myHelper.insertKunde(neuerKunde);
+
         myHelper.closeConnection();
 
-
     }
+
+    /*
+     1. class Produkt ProuktNr Bezeichnung Nettopreis UstSatz
+     2. DBHelper erweitern
+     --- insertNeuesProdukt(produkt)
+     --- getProduktById(1) --> Produkt
+     --- getProdukteWherePreisKleiner(30) -- List von Produkte
+            alle IDs lesen und danach die Methode getProduktById zum Lesen verwenden
+      ---updateProdukt(produkt) --- geändert wird die Bezeichnung und der Preis anahand der ProduktNr)
+      Produkt p2 = myHelper.getProduktById(2);
+      p2.setBezeichnung("Handy");
+      p2.setPreis(40);
+      myHelper.updateProdukt(p2);
+      myHelper.deleteProduktById(37) ---> Anzahl gelöschter Produkte (executeUpdate -- affectedRows)
+
+      Bearbeitung bis 11:45 Uhr, danach Mittagspause, Treffen um 12:30 Uhr
+
+
+
+
+
+     */
+
+
 }
