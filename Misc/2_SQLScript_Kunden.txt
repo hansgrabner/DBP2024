@@ -1,0 +1,14 @@
+DROP Table Kunden;
+CREATE TABLE Kunden
+(
+    KDNR INTEGER PRIMARY KEY,
+    Vorname Text,
+    Bonuspunkte INTEGER
+);
+
+INSERT INTO Kunden VALUES(1,'Johann',20);
+INSERT INTO Kunden VALUES(2,'Eva',25);
+
+INSERT INTO Kunden(Vorname, Bonuspunkte) VALUES('Kurt',NULL);
+
+SELECT KDNR, Vorname, Bonuspunkte FROM Kunden;

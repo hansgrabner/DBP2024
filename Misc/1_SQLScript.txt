@@ -1,0 +1,104 @@
+
+
+SELECT
+        LVNr, Bezeichnung, Stunden,
+        Stunden * 1.1 AS Plus10Prozent
+FROM LVs
+WHERE LVNr = 3  OR Bezeichnung LIKE '%Script%'
+ ORDER BY Bezeichnung DESC;
+
+INSERT INTO LVs(LVNr, Bezeichnung, Stunden)
+    VALUES(12, 'JavaScript',20.3);
+
+UPDATE LVs
+    SET Bezeichnung ='JavaScript mit React'
+    WHERE LVNr=12;
+
+DELETE FROM LVs
+    WHERE LVNr = 4
+
+
+--Tabelle mit Detailinhalten zu den LVs
+--Verbindung aufbauen
+--Resultset abrufen
+--DML-Operationen ausführen
+CREATE TABLE Detailinhalte
+(
+    InhaltNR INT PRIMARY KEY,
+    LVNr INT, --Foreign Key Constraint (Primary Key, Foreign Key, Check, Not null)
+    Inhalt VARCHAR(50)
+);
+
+--Constraint bestimmt gültigkeit von Daten
+--Primary Key
+
+INSERT INTO Detailinhalte(InhaltNR, LVNr, Inhalt)
+    VALUES(17,2,'Verbindung aufbauen');
+
+INSERT INTO Detailinhalte(InhaltNR, LVNr, Inhalt)
+    VALUES(2,3,'Resultset abrufen');
+
+INSERT INTO Detailinhalte(InhaltNR, LVNr, Inhalt)
+    VALUES(3,3,'DML Operationen ausführen');
+
+SELECT * FROM Detailinhalte;
+
+--Werte aus 2 Tabellen
+--3 DBP 17 Verbindung aufbauen
+--3 DBP 17 Resultset abrufen
+--3 DBP 17 DML Operation
+
+
+SELECT l.LVNr MeineLVNummer, l.Bezeichnung, l.Stunden,
+    d.Inhalt
+FROM LVs l JOIN Detailinhalte d; --Table Alias - Kürzel
+
+
+SELECT l.LVNr MeineLVNummer, l.Bezeichnung, l.Stunden,
+    d.Inhalt
+FROM LVs l JOIN Detailinhalte d
+ON l.Lvnr = d.lvnr
+
+; --Table Alias - Kürzel
+
+
+
+INSERT INTO Detailinhalte(InhaltNR, LVNr, Inhalt)
+    VALUES(10,17,'DML Operationen ausführen');
+
+DELETE FROM Detailinhalte Where InhaltNR=10;
+
+
+DELETE FROM LVs WHERE LVNr = 3;
+
+
+
+
+--Urlaubsplanung
+--Kunst
+    --Museum
+    --Kino
+    --Buch
+
+--Erholung
+   --Therme
+   --Lange Schlafen
+   --irgend etwas
+
+--Normalisierung
+--SQL DML DDL DCL
+---Datenbank mit 2 Tabellen (Primary Keys), mindestens 3 Spalten, verbunden über Foreign Key
+-- DDL CREATE Table
+-- SELECT (inkl. JOIN), ORDER, WHERE
+-- DML - INSERT UPDATE DELETE (Verstoß gegen Foreign Constraint)
+-- ca. 80 Minuten, danach Mittagspause, Treffen um 12:30 Uhr - gemeinsame Auflösung
+--CRUD
+
+
+
+
+
+
+
+
+
