@@ -428,5 +428,11 @@ public class DBHelper {
     }
 
 
+    /* Aufgabe 16.11 Metadaten  Kapitel aufarbeiten
+        Sinn - Klassen, Interfaces
+        2 "sinnvolle" Beispiele
+        Ausarbeitung bis 13:15 und danach 20 Minuten Pause bis 13:35 Uhr
+     */
+
 
 }
