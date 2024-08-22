@@ -272,6 +272,35 @@ public class DBHelper {
     //nur wenn beides erfolgreich ist soll die Transaktion dauerhaft gespeichert werden
     //Übung bis 09:20, danach 20 Minuten Pause, 09:40 gemeinsam Aufläsung
 
+    public void transferBonuspunkte(int fromKundenNr, int toKundenNr, int amount) {
+        String subtractPointsSql = "UPDATE Kunden SET Bonuspunkte = Bonuspunkte - ? WHERE KundenNr = ?";
+        String addPointsSql = "UPDATE Kunden SET Bonuspunkte = Bonuspunkte + ? WHERE KundenNr = ?";
+
+        try (Connection conn = DriverManager.getConnection(url);
+             PreparedStatement subtractStmt = conn.prepareStatement(subtractPointsSql);
+             PreparedStatement addStmt = conn.prepareStatement(addPointsSql)) {
+
+            conn.setAutoCommit(false);
+
+            subtractStmt.setInt(1, amount);
+            subtractStmt.setInt(2, fromKundenNr);
+
+            addStmt.setInt(1, amount);
+            addStmt.setInt(2, toKundenNr);
+
+            int rowsSubtracted = subtractStmt.executeUpdate();
+            int rowsAdded = addStmt.executeUpdate();
+
+            if (rowsSubtracted == 1 && rowsAdded == 1) {
+                conn.commit();
+            } else {
+                conn.rollback();
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
 
 }
