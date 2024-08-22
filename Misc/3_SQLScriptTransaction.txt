@@ -1,0 +1,121 @@
+DROP Table Kunden;
+CREATE TABLE Kunden
+(
+    KDNR INTEGER PRIMARY KEY,
+    Vorname Text,
+    Bonuspunkte INTEGER
+);
+
+INSERT INTO Kunden VALUES(1,'Johann',20);
+INSERT INTO Kunden VALUES(2,'Eva',25);
+
+INSERT INTO Kunden(Vorname, Bonuspunkte) VALUES('Kurt',NULL);
+
+SELECT KDNR, Vorname, Bonuspunkte FROM Kunden;
+
+
+-- DriverManager.getConnection
+-- Stament stmt = con.createStatement()
+--stmt.executeQuery --> ResultSet
+
+SELECT KDNR, Vorname, Bonsupunkte FROM Kunden;
+
+--while (rs.next()){
+-- String vorname = rs.getString(2);
+-- int kdnr = rs.getInt(1);
+-- int bonuspunkte = rs.getInt(3)
+
+--}
+
+
+
+SELECT Vorname, Bonsupunkte, KDNR FROM Kunden;
+
+--while (rs.next()){
+-- String vorname = rs.getString(1);
+-- int kdnr = rs.getInt(3);
+-- int bonuspunkte = rs.getInt(2)
+--string fehlerText=""; "Bonuspunkte sind nicht definiert
+--if (rs.wasNull()){
+--    fehlerText="Bonuspunkte sind nicht definiert";
+
+--}
+SELECT * FROM KUNDEN WHERE Bonuspunkte = 25;
+
+SELECT * FROM KUNDEN WHERE Bonuspunkte IS NULL;
+
+
+SELECT * FROM KUNDEN WHERE KDNR = 7;
+
+INSERT INTO KUNDEN(Vorname,Bonuspunkte) VALUES('ein Dummy',22)
+
+
+
+ProduktNr, Bezeichnung NettoPreis UstSatz
+
+
+CREATE TABLE Produkte
+(
+    ProduktNr INTEGER PRIMARY KEY,
+    Bezeichnung TEXT,
+    NettoPreis NUMERIC,
+    UstSatz NUMERIC
+);
+
+INSERT INTO Produkte(Bezeichnung, NettoPreis, UstSatz) VALUES('Maus',12,20);
+
+SELECT ProduktNr, Bezeichnung, NettoPreis, UstSatz ,
+    NettoPreis * UstSatz / 100 AS UstBetrag,
+  NettoPreis *  (1 + UstSatz / 100.) AS BruttoBetrag
+FROM Produkte;
+
+UPDATE Produkte
+SET Bezeichnung='iPhone', NettoPreis = 500, UstSatz = 10
+WHERE ProduktNr = 1;
+
+UPDATE Produkte
+SET Bezeichnung= ?, NettoPreis = ?, UstSatz = ?
+WHERE ProduktNr = ?;
+
+DELETE FROM Produkte
+WHERE ProduktNr = 1;
+
+
+
+
+
+
+
+CREATE TABLE Bankkonto
+(
+    KontoNur INTEGER PRIMARY KEY,
+    Inhaber Text,
+    Betrag NUMERIC
+);
+
+
+INSERT INTO Bankkonto(Inhaber,Betrag) VALUES('Maria',200);
+INSERT INTO Bankkonto(Inhaber,Betrag) VALUES('Anja',150);
+
+SELECT * FROM Bankkonto;
+
+BEGIN TRANSACTION;
+--conn.setAutocommit(false)
+
+UPDATE Bankkonto
+SET Betrag = Betrag + 50
+WHERE KontoNur = 1;
+
+UPDATE Bankkonto
+SET Betrag = Betrag - 50
+WHERE KontoNur = 2;
+
+COMMIT; --schließt die Transaktion endgültig ab
+--conn.commit();
+ROLLBACK; --macht alles rückgängig
+--conn.rollback();
+
+
+
+
+

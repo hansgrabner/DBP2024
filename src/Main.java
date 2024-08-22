@@ -46,7 +46,8 @@ public class Main {
         System.out.println("\nDeleted Products");
         System.out.println(produktDeleted);
 */
-        myHelper.demoTransaction();
+       // myHelper.demoTransaction();
+        myHelper.createTableCustomer();
         myHelper.closeConnection();
 
     }
