@@ -302,5 +302,23 @@ public class DBHelper {
         }
     }
 
+    public int createKundenArtTable(){
+        int rowaffected=0;
+        String createTable = "CREATE TABLE KundenArten\n" +
+                "(\n" +
+                "    KundenArtId INTEGER Primary Key,\n" +
+                "    Bezeichnung TEXT\n" +
+                ");";
+        try {
+            PreparedStatement pCreate = conn.prepareStatement(createTable);
+
+            rowaffected= pCreate.executeUpdate();
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return  rowaffected;
+    }
+
 
 }
