@@ -323,4 +323,37 @@ public class DBHelper {
     }
 
 
+    /*
+        1. Aufgabe
+        void insertKundenArt(String bezeichnung)
+        void insertKundenArt(KundenArt art) --> bevorzugt
+        -- Silver, Gold, Diamant
+
+        2. Aufgabe
+        Tabelle Kunden um eine Spalte KundenArt erweitern
+        Foreign Key KundenArten setzen
+        Kunden mit "random" Kundenarten versehen
+
+        3. Aufgabe (Join)
+        Ausgabe Kunden inkl. KundnArt     Jessica Diamond
+                                           Johann Silver
+
+         4. getKundenByKundenArt(String bezeichnung)
+          List<Kunden> getKundeByKundenArt("Silver")
+          List<Kunden> getKundeByKundenArtId(1)
+
+          5. getSummeBonuspunkteProKundenArt
+           Silver 70
+           Gold   110
+           Diamond 240
+
+           Übung bis 11:15 Uhr, danach Mittagspause und um 12:15 Uhr Auflösung
+
+
+
+
+
+     */
+
+
 }
