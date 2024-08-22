@@ -81,18 +81,40 @@ public class DBHelper {
     }
 
     public void insertKunde(Kunde neuerKunde) {
+
         String insertSQL = "INSERT INTO Kunden(Vorname,Bonuspunkte) VALUES(?,?);";
         try {
             PreparedStatement pInsertKunde = conn.prepareStatement(insertSQL);
             pInsertKunde.setString(1, neuerKunde.getVorname());
             pInsertKunde.setInt(2, neuerKunde.getBonuspunkte());
             int rowaffected= pInsertKunde.executeUpdate();
+            neuerKunde.setKDNR(last_insert_rowid());
         }
         catch (SQLException e){
             System.out.println(e.getMessage());
         }
 
+
     }
+
+    //SELECT last_insert_rowid()
+    public int last_insert_rowid() {
+        int rowId=0;
+        try {
+            PreparedStatement rowIdStmt = conn.prepareStatement(
+                    "SELECT last_insert_rowid()");
+
+            ResultSet rs = rowIdStmt.executeQuery();
+
+            rs.next();
+            rowId = rs.getInt(1);
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return rowId;
+    }
+
 /*
  1. class Produkt ProuktNr Bezeichnung Nettopreis UstSatz
  2. DBHelper erweitern
