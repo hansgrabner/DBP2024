@@ -492,5 +492,13 @@ public class DBHelper {
         Ausarbeitung bis 13:15 und danach 20 Minuten Pause bis 13:35 Uhr
      */
 
+    //addKundenArt(KundenArt kundenart)
+    //Autoincrement soll Automatisch befüllt - Primary Key
+    //neuen Kunden hinzufügen, mit der zu letzt eingefügten KundenArt
+    //KundenArt art = new KundenArt("Holz");
+    //myHelpder.insertKundenAart);
+    //Kunden kHolz = new Kunden();
+    //kHolz.setKundenArtNr(
+    //Auflösung um 14:20 Uhr
 
 }
