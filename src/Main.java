@@ -47,7 +47,7 @@ public class Main {
         System.out.println(produktDeleted);
 */
        // myHelper.demoTransaction();
-        myHelper.createKundenArtTable()
+        myHelper.createKundenArtTable();
         myHelper.closeConnection();
 
     }

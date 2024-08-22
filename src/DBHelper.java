@@ -276,6 +276,8 @@ public class DBHelper {
         String subtractPointsSql = "UPDATE Kunden SET Bonuspunkte = Bonuspunkte - ? WHERE KundenNr = ?";
         String addPointsSql = "UPDATE Kunden SET Bonuspunkte = Bonuspunkte + ? WHERE KundenNr = ?";
 
+        String url = "jdbc:sqlite:C:/LVs/DBP2024/Johann.db";
+
         try (Connection conn = DriverManager.getConnection(url);
              PreparedStatement subtractStmt = conn.prepareStatement(subtractPointsSql);
              PreparedStatement addStmt = conn.prepareStatement(addPointsSql)) {
