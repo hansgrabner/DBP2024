@@ -267,4 +267,11 @@ public class DBHelper {
 
     }
 
+    //public void transferBonuspunkte(int fromKundenNr, int toKundenNr, int amount)
+    //überweist die Bonsupunkte von einem Kunden zu einem anderen Kunden
+    //nur wenn beides erfolgreich ist soll die Transaktion dauerhaft gespeichert werden
+    //Übung bis 09:20, danach 20 Minuten Pause, 09:40 gemeinsam Aufläsung
+
+
+
 }
