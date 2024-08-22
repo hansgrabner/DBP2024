@@ -60,7 +60,8 @@ public class Main {
         //myHelper.readKundenInklKundenArt();
        // List<Kunde> meineSilverKunden = myHelper.getKundenByKundenArt("Silver");
         //System.out.println(meineSilverKunden);
-        myHelper.getSummeBonuspunkteProKundenArt();
+        //myHelper.getSummeBonuspunkteProKundenArt();
+        myHelper.getSummeBonuspunkteProKundenArtMeta();
         myHelper.closeConnection();
 
     }

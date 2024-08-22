@@ -427,6 +427,42 @@ public class DBHelper {
         }
     }
 
+        public void getSummeBonuspunkteProKundenArtMeta() {
+            String selectSQLStmt = "SELECT SUM(k.bonuspunkte) AS SummeBonuspunkte, ka.Bezeichnung FROM Kunden k JOIN KundenArten ka ON k.KundenArt = ka.KundenArtId GROUP BY Bezeichnung ORDER BY SUM(k.bonuspunkte) DESC";
+            try {
+                Statement readStmt = conn.createStatement();
+                ResultSet rs = readStmt.executeQuery(selectSQLStmt);
+                ResultSetMetaData meta = rs.getMetaData();
+
+                int numerics = 0;
+
+                for ( int i = 1; i <= meta.getColumnCount(); i++ )
+                {
+                    System.out.printf( "%-20s %-20s%n", meta.getColumnLabel( i ),
+                            meta.getColumnTypeName( i ) );
+
+                    if ( meta.isSigned( i ) )
+                        numerics++;
+                }
+
+                System.out.println();
+                System.out.println( "Spalten: " + meta.getColumnCount() +
+                        ", Numerisch: " + numerics );
+
+                DatabaseMetaData metaDB = conn.getMetaData();
+                System.out.println( "Product name " + metaDB.getDatabaseProductName() );
+                System.out.println( "Version: " + metaDB.getDatabaseProductVersion()  );
+                System.out.println( "Maximum number of connections: " + metaDB.getMaxConnections() );
+                System.out.println( "JDBC driver version: " + metaDB.getDriverVersion() );
+                System.out.println( "Supports update in batch: " + metaDB.supportsBatchUpdates() );
+                System.out.println( "Supports stored procedures: " + metaDB.supportsStoredProcedures() );
+
+
+            } catch (SQLException e) {
+                e.getMessage();
+            }
+    }
+
 
     /* Aufgabe 16.11 Metadaten  Kapitel aufarbeiten
         Sinn - Klassen, Interfaces
