@@ -45,4 +45,19 @@ public class Kunde {
     public void setBonuspunkte(int bonuspunkte) {
         Bonuspunkte = bonuspunkte;
     }
+
+    private String KundenArt;
+
+    public String getKundenArt() {
+        return KundenArt;
+    }
+
+    public Kunde(String vorname, String kundenArt) {
+        Vorname = vorname;
+        KundenArt = kundenArt;
+    }
+
+    public void setKundenArt(String kundenArt) {
+        KundenArt = kundenArt;
+    }
 }

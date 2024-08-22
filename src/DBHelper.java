@@ -5,6 +5,7 @@
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DBHelper {
     Connection conn = null;
@@ -350,10 +351,82 @@ public class DBHelper {
            Übung bis 11:15 Uhr, danach Mittagspause und um 12:15 Uhr Auflösung
 
 
-
-
-
      */
+
+    public void insertKundenArt(String kundenArt) {
+
+        String insertSQL = "INSERT INTO KundenArten(Bezeichnung) VALUES (?)";
+        try {
+            PreparedStatement insertKundenArt = conn.prepareStatement(insertSQL);
+            insertKundenArt.setString(1, kundenArt);
+            insertKundenArt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+    public void addColumnToTable() {
+        String addSQLColumn = "ALTER TABLE Kunden ADD KundenArt REFERENCES KundenArten (KundenArtId)";
+
+        try {
+            PreparedStatement addColumnToTable = conn.prepareStatement(addSQLColumn);
+
+            addColumnToTable.executeUpdate();
+
+        } catch (SQLException e) {
+            e.getMessage();
+        }
+    }
+
+    public void readKundenInklKundenArt() {
+        String selectSQLStmt = "SELECT k.vorname, ka.Bezeichnung FROM Kunden k JOIN KundenArten ka ON k.KundenArt = ka.KundenArtId";
+        try {
+            Statement readStmt = conn.createStatement();
+            ResultSet rs = readStmt.executeQuery(selectSQLStmt);
+
+            while (rs.next()) {
+                System.out.printf("Vorname: %s, Bezeichnung : %s%n", rs.getString(1), rs.getString(2));
+            }
+        } catch (SQLException e) {
+            e.getMessage();
+        }
+    }
+
+    public List<Kunde> getKundenByKundenArt(String bezeichnung) {
+        ArrayList<Kunde> kunden = new ArrayList<>();
+        String selectSQLStmt = "SELECT k.vorname, ka.Bezeichnung FROM Kunden k JOIN KundenArten ka ON k.KundenArt = ka.KundenArtId WHERE ka.Bezeichnung = ?";
+
+        try {
+            PreparedStatement getKunden = conn.prepareStatement(selectSQLStmt);
+            getKunden.setString(1, bezeichnung);
+            ResultSet rs = getKunden.executeQuery();
+
+            while (rs.next()) {
+                Kunde k = new Kunde(rs.getString(1), rs.getString(2));
+                kunden.add(k);
+            }
+
+        } catch (SQLException e) {
+            e.getMessage();
+        }
+        return kunden;
+    }
+
+    public void getSummeBonuspunkteProKundenArt() {
+        String selectSQLStmt = "SELECT SUM(k.bonuspunkte) AS SummeBonuspunkte, ka.Bezeichnung FROM Kunden k JOIN KundenArten ka ON k.KundenArt = ka.KundenArtId GROUP BY Bezeichnung ORDER BY SUM(k.bonuspunkte) DESC";
+        try {
+            Statement readStmt = conn.createStatement();
+            ResultSet rs = readStmt.executeQuery(selectSQLStmt);
+            while (rs.next()) {
+                System.out.printf("Bezeichnung : %s, SummeBonuspunkte: %s%n", rs.getString(2), rs.getString(1));
+            }
+
+        } catch (SQLException e) {
+            e.getMessage();
+        }
+    }
+
 
 
 }
