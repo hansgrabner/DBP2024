@@ -16,6 +16,16 @@ public class Kunde {
         return Vorname;
     }
 
+    private int KundenArtId;
+
+    public int getKundenArtId() {
+        return KundenArtId;
+    }
+
+    public void setKundenArtId(int kundenArtId) {
+        KundenArtId = kundenArtId;
+    }
+
     public void setVorname(String vorname) {
         Vorname = vorname;
     }

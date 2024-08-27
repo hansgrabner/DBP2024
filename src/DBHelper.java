@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DBHelper {
-    Connection conn = null;
+    java.sql.Connection conn = null;
 
     public void openConnection() {
         try {
@@ -82,11 +82,13 @@ public class DBHelper {
 
     public void insertKunde(Kunde neuerKunde) {
 
-        String insertSQL = "INSERT INTO Kunden(Vorname,Bonuspunkte) VALUES(?,?);";
+        String insertSQL = "INSERT INTO Kunden(Vorname,Bonuspunkte,KundenArt) VALUES(?,?,?);";
         try {
             PreparedStatement pInsertKunde = conn.prepareStatement(insertSQL);
             pInsertKunde.setString(1, neuerKunde.getVorname());
             pInsertKunde.setInt(2, neuerKunde.getBonuspunkte());
+            pInsertKunde.setInt(3, neuerKunde.getKundenArtId());
+
             int rowaffected= pInsertKunde.executeUpdate();
             neuerKunde.setKDNR(last_insert_rowid());
         }
@@ -269,9 +271,9 @@ public class DBHelper {
             pAbbuchen.setInt(1, 1);
             pGutbuchen.setInt(1, 7);
 
-            conn.setAutoCommit(false);
+            conn.setAutoCommit(false); //JDBC Startet automatisch eine Transaktion
 
-            rowaffectedAbbuchung = pAbbuchen.executeUpdate(); //Autocommit verhindern
+            rowaffectedAbbuchung = pAbbuchen.executeUpdate(); //Autocommit verhindern  BEGIN TRANSACTION
             rowaffectedGutbuchen = pGutbuchen.executeUpdate();//Autocommit verhindern
 
             if (rowaffectedAbbuchung == 1 && rowaffectedGutbuchen == 1){
@@ -500,5 +502,42 @@ public class DBHelper {
     //Kunden kHolz = new Kunden();
     //kHolz.setKundenArtNr(
     //Auflösung um 14:20 Uhr
+
+    public void insertKundenArt(KundenArt kundenArt) {
+
+        String insertSQL = "INSERT INTO KundenArten(Bezeichnung) VALUES (?)";
+        try {
+            PreparedStatement insertKundenArt = conn.prepareStatement(insertSQL);
+            insertKundenArt.setString(1, kundenArt.getBezeichnung());
+            insertKundenArt.executeUpdate();
+
+            int rowId = last_insert_rowid();
+            kundenArt.setKundenArtId(rowId);
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    /*
+    https://www.tutorialspoint.com/java-databasemetadata-gettables-method-with-example
+    metaData.getTables
+        class TableInfo
+        {
+            private String TableName;
+            private int ColumnCount;   //meta.getColumnCount()
+            private int RowCount;  //SELECT COUNT(*) FROM ? ---> Anzahl der Zeilen
+     */
+    //public List<TableInfo> getExtendedDatabaseMetaData
+    /*
+    public List<String> GetTableNamesForDatabase();
+    public int getColumnCountForTable(String tableName)
+    public int getRowCountForTable(String tableName)
+
+    Bankkonto 3 Spalten und 7 Zahlen
+    Kunde     5 Spalten und 12 Zeilen
+    Porudkte  4 Spalten und 5 Zeilen
+
+    Zeitplanung: Umsetzung ca. 1,5 Stunden bis 10:40, danach 20 Minuten Pause und um 11:00 Uhr gemeinsame Aufläsung
+     */
 
 }

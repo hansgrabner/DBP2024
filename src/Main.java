@@ -63,8 +63,13 @@ public class Main {
         //myHelper.getSummeBonuspunkteProKundenArt();
         //myHelper.getSummeBonuspunkteProKundenArtMeta();
 
+        KundenArt kHolz=new KundenArt();
+        kHolz.setBezeichnung("Holz");
+        myHelper.insertKundenArt(kHolz);
 
         Kunde kundeEva =new Kunde(-1, "Eva",90);
+        kundeEva.setKundenArtId(kHolz.getKundenArtId());
+
         myHelper.insertKunde(kundeEva);
 
         myHelper.closeConnection();
