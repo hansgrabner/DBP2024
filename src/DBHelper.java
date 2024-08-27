@@ -540,4 +540,115 @@ public class DBHelper {
     Zeitplanung: Umsetzung ca. 1,5 Stunden bis 10:40, danach 20 Minuten Pause und um 11:00 Uhr gemeinsame Aufläsung
      */
 
+    public List<TableInfo> getExtendedDatabaseMetaData() throws SQLException {
+        List<TableInfo> list = new ArrayList<>();
+
+        // Get database metadata
+        DatabaseMetaData dbMetaData = conn.getMetaData();
+
+        // Get list of tables in the database
+        ResultSet tables = dbMetaData.getTables(null, null, "%", new String[]{"TABLE"});
+
+        // Iterate over each table
+        while (tables.next()) {
+            String tableName = tables.getString("TABLE_NAME");
+
+            // Get column metadata for the current table
+            ResultSet columns = dbMetaData.getColumns(null, null, tableName, "%");
+
+            int columnCount = 0;
+            while (columns.next()) {
+                columnCount++;
+            }
+
+            columns.close(); // Close the columns ResultSet
+
+            // Get row count for the current table
+            String countQuery = "SELECT COUNT(*) FROM " + tableName;
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(countQuery);
+
+            int rowCount = 0;
+            if (rs.next()) {
+                rowCount = rs.getInt(1); // Get the row count from the query
+            }
+
+            rs.close(); // Close the row count ResultSet
+            stmt.close(); // Close the Statement
+
+            // Create a TableInfo object and add it to the list
+            TableInfo tableInfo = new TableInfo(tableName, columnCount, rowCount);
+            list.add(tableInfo);
+        }
+
+        tables.close(); // Close the tables ResultSet
+
+        return list; // Return list of table metadata
+    }
+
+    public List<TableInfo> getExtendedDatabaseMetaDataRefactored() throws SQLException {
+        List<String> tables = GetTableNamesForDatabase();
+        List<TableInfo> tableInfoList=new ArrayList<>();
+        //getColumnCountForTable
+        //getRowCountForTable
+        for (String tableName: tables) {
+            int columnCount = getColumnCountForTable(tableName);
+            int rowCount = getRowCountForTable(tableName);
+            TableInfo tInfo =new TableInfo(tableName,columnCount,rowCount);
+            tableInfoList.add(tInfo);
+        }
+        return  tableInfoList;
+    }
+
+    public List<String> GetTableNamesForDatabase() throws SQLException {
+        List<String> tableNames = new ArrayList<>();
+
+        // Get metadata from the connection
+        DatabaseMetaData metaData = conn.getMetaData();
+
+        // Retrieve the list of tables. The "%" pattern is used to get all tables.
+        ResultSet tables = metaData.getTables(null, null, "%", new String[]{"TABLE"});
+
+        // Iterate through the result set and collect table names
+        while (tables.next()) {
+            String tableName = tables.getString("TABLE_NAME");
+            tableNames.add(tableName); // Add each table name to the list
+        }
+
+        // Close the ResultSet after usage
+        tables.close();
+
+        // Return the list of table names
+        return tableNames;
+    }
+
+    public int getColumnCountForTable(String tableName) throws SQLException {
+        String selectSQLStmt = "SELECT * FROM " + tableName + " LIMIT 1"; // Fetch only 1 row
+
+        Statement readStmt = conn.createStatement();
+        ResultSet rs = readStmt.executeQuery(selectSQLStmt);
+        ResultSetMetaData meta = rs.getMetaData();
+
+        int columnCount = meta.getColumnCount();
+
+        rs.close();
+        readStmt.close();
+
+        return columnCount;
+    }
+    public int getRowCountForTable(String tableName) throws SQLException {
+        String selectSQLStmt = "SELECT COUNT(*) AS row_count FROM " + tableName;
+        Statement readStmt = conn.createStatement();
+        ResultSet rs = readStmt.executeQuery(selectSQLStmt);
+
+        int rowCount = 0;
+        if (rs.next()) {
+            rowCount = rs.getInt("row_count");
+        }
+
+        rs.close();
+        readStmt.close();
+
+        return rowCount;
+    }
 }

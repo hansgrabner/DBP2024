@@ -1,3 +1,4 @@
+import java.sql.SQLException;
 import java.util.List;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
@@ -63,6 +64,7 @@ public class Main {
         //myHelper.getSummeBonuspunkteProKundenArt();
         //myHelper.getSummeBonuspunkteProKundenArtMeta();
 
+        /*
         KundenArt kHolz=new KundenArt();
         kHolz.setBezeichnung("Holz");
         myHelper.insertKundenArt(kHolz);
@@ -71,6 +73,22 @@ public class Main {
         kundeEva.setKundenArtId(kHolz.getKundenArtId());
 
         myHelper.insertKunde(kundeEva);
+
+        */
+
+        try{
+           List<TableInfo> dbMetaData=  myHelper.getExtendedDatabaseMetaData();
+            System.out.println("Variante 1");
+           System.out.println(dbMetaData);
+
+            dbMetaData=  myHelper.getExtendedDatabaseMetaDataRefactored();
+            System.out.println("Variante 2");
+            System.out.println(dbMetaData);
+
+        }
+        catch (SQLException e){
+
+        }
 
         myHelper.closeConnection();
 
